@@ -11,40 +11,35 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('User', UserSchema);
+const Users = mongoose.model('Users', UserSchema);
 
-const getAll = async () => {
-    const users = await User.find().exec();
-    return users;
+const getAll = () => {
+    return Users.find().exec();
 }
 
-const getById = async (userId) => {
-    const reqUser = await User.findById(userId).exec();
-    return reqUser;
+const getById = (userId) => {
+    return Users.findById(userId).exec();
 }
 
-const deleteUser = async (userId) => {
-    const deletedUser = await User.findByIdAndDelete(noteId).exec();
-    return deletedUser;
+const deleteUser = (userId) => {
+    return Users.findByIdAndDelete(noteId).exec();
 }
 
-const editUser = async (userId, newInfo) => {
-
-    const newUser = newInfo;
-    const modifiedUser = await User.findByIdAndUpdate(userId, newUser).save();
-    return modifiedUser;
+const editUser = (userId, newInfo) => {
+    return Users.findByIdAndUpdate(userId, newInfo).save();
 }
 
-/*const addNote = async (note) => {
-    const newNote = note;
-    const addedNote = await 
-}*/
+const addUser = (user) => {
+    const newUser = new Users(user);
+    return newUser.save();
+}
 
 module.exports = {
     getAll,
     getById,
     deleteUser,
-    editUser
+    editUser,
+    addUser
 }
 
 

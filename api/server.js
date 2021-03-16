@@ -19,8 +19,9 @@ const connectDB = async () => {
   };
   connectDB();
 
-server.use('api/notes', noteRouter);
-server.use('api/users', userRouter);
+server.use(express.json())
+server.use('/api/users/:id/notes', noteRouter);
+server.use('/api/users', userRouter);
 
 server.get('/', (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);

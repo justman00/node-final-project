@@ -5,42 +5,38 @@ const NoteSchema = new mongoose.Schema({
     content: String,
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'Users'
     }
 });
 
-const Note = mongoose.model('Note', NoteSchema);
+const Notes = mongoose.model('Notes', NoteSchema);
 
-const getAll = async () => {
-    const notes = await Note.find().exec();
-    return notes;
+const getAll = () => {
+    return Notes.find().exec();
 }
 
-const getById = async (noteId) => {
-    const reqNote = await Note.findById(noteId).exec();
-    return reqNote;
+const getById = (noteId) => {
+    return Notes.findById(noteId).exec();
 }
 
-const deleteNote = async (noteId) => {
-    const deletedNote = await Note.findByIdAndDelete(noteId).exec();
-    return deletedNote;
+const deleteNote = (noteId) => {
+    return Notes.findByIdAndDelete(noteId).exec();
 }
 
-const editNote = async (noteId, newInfo) => {
+const editNote = (noteId, newInfo) => {
 
-    const newNote = newInfo;
-    const modifiedNote = await Note.findByIdAndUpdate(noteId, newNote).save();
-    return modifiedNote;
+    return Notes.findByIdAndUpdate(noteId, newInfo).exec();
 }
 
-/*const addNote = async (note) => {
-    const newNote = note;
-    const addedNote = await 
-}*/
+const addNote = (note) => {
+    const newNote = new Notes(note);
+    return newNote.save();
+}
 
 module.exports = {
     getAll,
     getById,
     deleteNote,
-    editNote
+    editNote,
+    addNote
 }
