@@ -18,4 +18,11 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { User };
+const add = (user) => {
+  return new User(user).save();
+};
+
+const findBy = (filter) =>{
+  return User.findOne(filter).exec();
+}
+module.exports = { add, findBy };
