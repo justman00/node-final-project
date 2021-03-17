@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.post(
   "/register",
-  checkUsernameFree(),
-  checkPasswordLength(),
+  checkUsernameFree,
+  checkPasswordLength,
   async (req, res, next) => {
     try {
       const newUser = await User.add({
@@ -30,8 +30,8 @@ router.post(
 
 router.post(
   "/login",
-  checkUsernameExists(),
-  checkPasswordValid(),
+  checkUsernameExists,
+  checkPasswordValid,
   async (req, res, next) => {
     try {
       const token = jwt.sign(

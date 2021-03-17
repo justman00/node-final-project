@@ -42,7 +42,7 @@ const checkUsernameFree = async (req, res, next) => {
 const checkPasswordLength = async (req, res, next) => {
   try {
     const { password } = req.body;
-    if (!password || !password.length <= 3) {
+    if (!password || password.length <= 3) {
       return res
         .status(422)
         .json({ message: "Password must be longer than 3 chars." });
@@ -62,6 +62,7 @@ const checkUsernameExists = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     } else {
+      req.user = user;
       next();
     }
   } catch (err) {

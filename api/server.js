@@ -21,7 +21,7 @@ const connectDB = async () => {
 };
 
 connectDB();
-
+mongoose.set('useCreateIndex', true);
 const server = express();
 const usersRouter = require("./users/users-router");
 const notesRouter = require("./notes/notes-router");
