@@ -20,7 +20,7 @@ const connectDB = async () => {
   connectDB();
 
 server.use(express.json())
-server.use('/api/users/:id/notes', noteRouter);
+server.use(noteRouter);
 server.use('/api/users', userRouter);
 
 server.get('/', (req, res) => {

@@ -11,8 +11,8 @@ const NoteSchema = new mongoose.Schema({
 
 const Notes = mongoose.model('Notes', NoteSchema);
 
-const getAll = () => {
-    return Notes.find().exec();
+const getAll = (userId) => {
+    return Notes.find({user_id: userId}).exec();
 }
 
 const getById = (noteId) => {
