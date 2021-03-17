@@ -17,9 +17,11 @@ router.post(
   checkPasswordLength,
   async (req, res, next) => {
     try {
+      const { username, email, password } = req.body;
       const newUser = await User.add({
-        password: await bcrypt.hash(req.body.password, 14),
-        ...req.body,
+        username,
+        email,
+        password: await bcrypt.hash(password, 14),
       });
       res.status(201).json(newUser);
     } catch (err) {
@@ -36,7 +38,7 @@ router.post(
     try {
       const token = jwt.sign(
         {
-          user_id: req.user.user_id,
+          user_id: req.user._id,
           username: req.user.username,
         },
         process.env.JWT_SECRET,
@@ -46,6 +48,7 @@ router.post(
 
       res.json({
         message: `Welcome ${req.user.username}`,
+        token: token,
       });
     } catch (err) {
       next(err);
@@ -57,7 +60,8 @@ router.get("/logout", async (req, res, next) => {
   try {
     res.clearCookie("token");
     res.redirect("/");
-  } catch (err) {
+    console.log("Logged out.")
+} catch (err) {
     next(err);
   }
 });

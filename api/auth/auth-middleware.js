@@ -27,7 +27,7 @@ const restricted = async (req, res, next) => {
 const checkUsernameFree = async (req, res, next) => {
   try {
     const { username } = req.body;
-    const user = await User.findBy(username);
+    const user = await User.findBy({username});
     //console.log("user", user);
     if (user) {
       return res.status(422).json({ message: "Username is already taken." });
@@ -57,8 +57,8 @@ const checkPasswordLength = async (req, res, next) => {
 const checkUsernameExists = async (req, res, next) => {
   try {
     const { username } = req.body;
-    const user = await User.findBy(username);
-    //console.log("user", user);
+    const user = await User.findBy({username});
+    console.log("user", user);
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     } else {
@@ -72,8 +72,8 @@ const checkUsernameExists = async (req, res, next) => {
 
 const checkPasswordValid = async (req, res, next) => {
   try {
-    const { password } = req.body;
-    const user = await User.findBy(username);
+    const { username, password } = req.body;
+    const user = await User.findBy({username});
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
       return res.status(401).json({ message: "Invalid credentials." });

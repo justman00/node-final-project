@@ -23,6 +23,6 @@ const add = (user) => {
 };
 
 const findBy = (filter) =>{
-  return User.findOne({filter}).exec();
+  return User.findOne(filter).exec();
 }
 module.exports = { add, findBy };
