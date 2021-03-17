@@ -15,17 +15,17 @@ const getAll = (userId) => {
     return Notes.find({user_id: userId}).exec();
 }
 
-const getById = (noteId) => {
-    return Notes.findById(noteId).exec();
+const getById = (noteId, userId) => {
+    return Notes.findById(noteId).where({user_id: userId}).exec();
 }
 
-const deleteNote = (noteId) => {
-    return Notes.findByIdAndDelete(noteId).exec();
+const deleteNote = (noteId, userId) => {
+    return Notes.findByIdAndDelete(noteId).where({user_id: userId}).exec();
 }
 
-const editNote = (noteId, newInfo) => {
+const editNote = (noteId, newInfo, userId) => {
 
-    return Notes.findByIdAndUpdate(noteId, newInfo).exec();
+    return Notes.findByIdAndUpdate(noteId, newInfo).where({user_id: userId}).exec();
 }
 
 const addNote = (note) => {
