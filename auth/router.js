@@ -8,6 +8,8 @@ const { validateUserBody } = require('./middlewares');
 const router = express.Router();
 // 605386bdb7cb9535c2ebca6f
 router.post('/register', validateUserBody, async (req, res, next) => {
+  const { email, password } = req.body;
+
   try {
     const newUser = await new User({
       email,
