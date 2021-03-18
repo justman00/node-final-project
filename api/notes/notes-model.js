@@ -37,4 +37,20 @@ const update = (note_id, updatedNote) => {
   return Note.findByIdAndUpdate(note_id, updatedNote).exec();
 };
 
-module.exports = { get, getById, add, remove, update };
+const getUserNotes = (userId) => {
+  return Note.find({ user_id: userId }).exec();
+};
+
+const getUserNote = (userId, noteId) => {
+  return Note.find({ user_id: userId, _id: noteId }).exec();
+};
+
+module.exports = {
+  get,
+  getById,
+  add,
+  remove,
+  update,
+  getUserNotes,
+  getUserNote,
+};

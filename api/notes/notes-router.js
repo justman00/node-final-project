@@ -2,33 +2,76 @@ const express = require("express");
 
 const Note = require("./notes-model");
 
+const { validateNoteId, validateNote } = require("./notes-middleware");
+const { restricted } = require("../auth/auth-middleware");
+
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", restricted, async (req, res, next) => {
   try {
-    const notes = await Note.get();
+    const notes = await Note.getUserNotes(req.decoded.user_id);
     res.status(200).json(notes);
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:note_id", async (req, res, next) => {
-  try {
-    const foundNote = await Note.getById(req.params.note_id);
-    res.status(200).json(foundNote);
-  } catch (err) {
-    next(err);
-  }
-});
+router.get(
+  "/:note_id",
+  restricted,
+  validateNoteId(),
+  async (req, res, next) => {
+    try {
+      const foundNote = await Note.getUserNote(
+        req.decoded.user_id,
+        req.params.note_id,
+      );
+      res.status(200).json(foundNote);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
-router.post("/", async (req, res, next) => {
+router.post("/", restricted, validateNote(), async (req, res, next) => {
   try {
-    const newNote = await Note.add(req.body);
+    const newNote = await Note.add({
+      ...req.body,
+      user_id: req.decoded.user_id,
+    });
     res.status(201).json(newNote);
   } catch (err) {
     next(err);
   }
 });
+
+router.put(
+  "/:note_id",
+  restricted,
+  validateNote(),
+  validateNoteId(),
+  async (req, res, next) => {
+    try {
+      const updatedNote = await Note.update(req.params.note_id, req.body);
+      res.status(200).json(updatedNote);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.delete(
+  "/:note_id",
+  restricted,
+  validateNoteId(),
+  async (req, res, next) => {
+    try {
+      const deletedNote = await Note.remove(req.params.note_id);
+      res.status(200).json(deletedNote);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 module.exports = router;

@@ -21,7 +21,10 @@ const connectDB = async () => {
 };
 
 connectDB();
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true);
+
+const logger = require("./middleware/logger-middleware");
+const error = require("./middleware/error-middleware");
 const server = express();
 const usersRouter = require("./users/users-router");
 const notesRouter = require("./notes/notes-router");
@@ -29,11 +32,14 @@ const authRouter = require("./auth/auth-router");
 
 server.use(helmet());
 server.use(cors());
+server.use(logger("combined"));
 server.use(express.json());
 server.use(cookieParser());
-server.use(usersRouter);
+server.use("/api/users", usersRouter);
 server.use("/api/notes", notesRouter);
 server.use("/api/auth", authRouter);
+server.use(error);
+
 server.get("/", (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
 });
