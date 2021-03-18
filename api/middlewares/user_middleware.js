@@ -12,10 +12,7 @@ const validateUserId = (req, res, next) => {
             else
             next();
         }).catch((err) => {
-            console.log('middleware error: ', err)
-            return res.status(500).json({
-                msg: 'Something went wrong'
-            })
+            next(err);
         })
         
     }
@@ -23,6 +20,29 @@ const validateUserId = (req, res, next) => {
     return res.status(404).json({msg: 'id not valid'})
 }
 
+const validateUser = (req, res, next) => {
+    if(!req.body.username || !req.body.password) {
+        return res.status(400).json({
+            msg: 'Invalid credentials'
+        })
+    }
+    else
+    Users.getAll().then((users) => {
+        users.forEach((user) => {
+            if(user.username === req.body.username) {
+                return res.status(409).json({
+                    msg: 'username already taken'
+                })
+            }
+        })
+    }).catch((err) => {
+        next(err);
+    })
+    
+    next();
+}
+
 module.exports = {
-    validateUserId
+    validateUserId,
+    validateUser
 }

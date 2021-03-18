@@ -21,7 +21,13 @@ const connectDB = async () => {
 
 server.use(express.json())
 server.use(noteRouter);
-server.use('/api/users', userRouter);
+server.use('/api', userRouter);
+
+server.use((err, req, res, next) => { //error middleware
+  return res.status(500).json({
+    msg: 'Something went wrong'
+  })
+})
 
 server.get('/', (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
