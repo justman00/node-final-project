@@ -1,7 +1,7 @@
 const express = require("express");
 
 const Note = require("./notes-model");
-
+const { Tag } = require("./notes-model");
 const { validateNoteId, validateNote } = require("./notes-middleware");
 const { restricted } = require("../auth/auth-middleware");
 
@@ -40,6 +40,22 @@ router.post("/", restricted, validateNote(), async (req, res, next) => {
       user_id: req.decoded.user_id,
     });
     res.status(201).json(newNote);
+  } catch (err) {
+    next(err);
+  }
+});
+
+////// add a tag to your note /////
+router.post("/tags", restricted, validateNote(), async (req, res, next) => {
+  try {
+    const newTag = await new Tag(req.body).save();
+
+    const updatedNote = await Promise.all(
+      newTag.notes.map((note_id) => {
+        return Note.updateOne(note_id, newTag._id);
+      }),
+    );
+    res.json({ newTag, updatedNote });
   } catch (err) {
     next(err);
   }

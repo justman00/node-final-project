@@ -59,9 +59,8 @@ router.post(
 router.get("/logout", async (req, res, next) => {
   try {
     res.clearCookie("token");
-    res.redirect("/");
-    console.log("Logged out.")
-} catch (err) {
+    res.status(200).json({ message: "Logged out." });
+  } catch (err) {
     next(err);
   }
 });

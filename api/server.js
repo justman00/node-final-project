@@ -38,10 +38,10 @@ server.use(cookieParser());
 server.use("/api/users", usersRouter);
 server.use("/api/notes", notesRouter);
 server.use("/api/auth", authRouter);
-server.use(error);
 
 server.get("/", (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
 });
 
+server.use(error);
 module.exports = server;
