@@ -1,6 +1,6 @@
 const express = require('express');
 const Notes = require('./../models/notes_model');
-const { validateUserId } = require('./../middlewares/user_middleware');
+const { validateUserId, restrictUser } = require('./../middlewares/user_middleware');
 const { validateNote, validateNoteId } = require('./../middlewares/note_middleware');
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.post('/api/users/:userId/notes', validateUserId, validateNote, (req, res,
     })
 })
 
-router.get('/api/users/:userId/notes', validateUserId, (req, res, next) => {
+router.get('/api/users/:userId/notes', validateUserId, restrictUser(), (req, res, next) => {
     Notes.getAll(req.params.userId).then((notes) => {
         return res.status(200).json(notes)
     }).catch((err) => {

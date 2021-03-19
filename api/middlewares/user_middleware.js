@@ -1,5 +1,6 @@
 const Users = require('./../models/user_model');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const validateUserId = (req, res, next) => {
     if(mongoose.Types.ObjectId.isValid(req.params.userId)) {
@@ -42,7 +43,27 @@ const validateUser = (req, res, next) => {
     next();
 }
 
+const restrictUser = () => {
+    return async (req, res, next) => {
+        try {
+            const token = req.headers.authorization;
+            jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+                if(err) {
+                    return res.status(401).json({
+                        msg: 'Invalid credentials'
+                    })
+                }
+            })
+
+            next();
+        } catch (error) {
+            next(error)
+        }
+    }
+}
+
 module.exports = {
     validateUserId,
-    validateUser
+    validateUser,
+    restrictUser
 }
