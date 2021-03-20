@@ -4,8 +4,10 @@ if(process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const authRouter = require('./auth/router');
+const notesRouter = require('./notes/router');
 
 mongoose.connect(
   `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@stepit-cluster.cbszf.mongodb.net/notesApp?retryWrites=true&w=majority`,
@@ -18,8 +20,10 @@ mongoose.connect(
 const server = express();
 
 server.use(express.json());
+server.use(cookieParser());
 
 server.use('/api/auth', authRouter);
+server.use('/api/notes', notesRouter);
 
 server.get('/', (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
