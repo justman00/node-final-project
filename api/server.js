@@ -1,4 +1,6 @@
- if(process.env.NODE_ENV !== "production") {require("dotenv").config()};
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -22,22 +24,25 @@ const connectDB = async () => {
 
 connectDB();
 mongoose.set("useCreateIndex", true);
+mongoose.set("useFindAndModify", false);
 
-const logger = require("./middleware/logger-middleware");
-const error = require("./middleware/error-middleware");
+const logger = require("./middleware/logger");
+const error = require("./middleware/error");
 const server = express();
-const usersRouter = require("./users/users-router");
-const notesRouter = require("./notes/notes-router");
-const authRouter = require("./auth/auth-router");
+const authRouter = require("./auth/router");
+const usersRouter = require("./users/router");
+const notesRouter = require("./notes/router");
+const tagsRouter = require("./tags/router");
 
 server.use(helmet());
 server.use(cors());
 server.use(logger("combined"));
 server.use(express.json());
 server.use(cookieParser());
+server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/notes", notesRouter);
-server.use("/api/auth", authRouter);
+server.use("/api/tags", tagsRouter);
 
 server.get("/", (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
