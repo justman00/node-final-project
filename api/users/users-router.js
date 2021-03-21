@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("./users-model");
+const {restrictedAcces} = require('../middleware/middleware');
 
-router.get("/", async (req, res, next) => {
+router.get("/", restrictedAcces, async (req, res, next) => {
+ console.log('Decoded', req.decoded);
   Users.find()
     .exec()
     .then((allUsers) => {
@@ -16,17 +18,6 @@ router.get("/id", async (req, res, next) => {
     .exec()
     .then((findUser) => {
       res.status(200).json(findUser);
-    })
-    .catch(next);
-});
-
-router.post("/", async (req, res, next) => {
-  const newUser = req.body;
-
-  new Users(req.body)
-    .save()
-    .then((addUser) => {
-      res.status(200).json(addUser);
     })
     .catch(next);
 });
