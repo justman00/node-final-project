@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { Note } = require("./model");
+const { Note, Tag } = require("./model");
 const { validateNote, checkNoteExists } = require("./middleware");
 const { restrict } = require("../auth/middleware");
 
@@ -88,5 +88,53 @@ router.delete(
     }
   },
 );
+
+router.post("/tags", restrict, async (req, res, next) => {
+  try {
+    const { name, notes } = req.body;
+    const foundTag = await Tag.findOne({ name }).exec();
+    const foundNote = await Note.findById({ _id: notes }).exec();
+
+    if (!foundTag) {
+      const newTag = await new Tag(req.body).save();
+      const updatedNote = await Promise.all(
+        Note.updateOne(
+          {
+            _id: foundNote._id,
+            user: req.decoded.user_id,
+          },
+          {
+            $push: { tags: newTag._id },
+          },
+          { upsert: true },
+        ),
+      );
+
+      return res.status(201).json({ newTag, updatedNote });
+    } else {
+      /*foundNote.tags.map((tag_id) => {
+        if (tag_id === foundTag._id) {
+          return res.json({ message: "Tag already added to this Note." });
+        }
+      });*/
+      
+      const updatedNote = await Promise.all(
+        Note.updateOne(
+          {
+            _id: foundNote._id,
+            user: req.decoded.user_id,
+          },
+          {
+            $push: { tags: foundTag._id },
+          },
+          { upsert: true },
+        ),
+      );
+      return res.status(200).json({ foundTag, updatedNote });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

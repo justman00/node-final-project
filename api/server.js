@@ -32,7 +32,6 @@ const server = express();
 const authRouter = require("./auth/router");
 const usersRouter = require("./users/router");
 const notesRouter = require("./notes/router");
-const tagsRouter = require("./tags/router");
 
 server.use(helmet());
 server.use(cors());
@@ -42,7 +41,6 @@ server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/notes", notesRouter);
-server.use("/api/tags", tagsRouter);
 
 server.get("/", (req, res) => {
   res.send(`<h1>Welcome to notes app</h1>`);
