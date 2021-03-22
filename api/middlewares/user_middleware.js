@@ -28,39 +28,21 @@ const validateUser = (req, res, next) => {
         })
     }
     else
-    Users.getAll().then((users) => {
-        users.forEach((user) => {
+    Users.getByUserName(req.body.username).then((user) => {
+        console.log('user :', user)
+        if(user) {
             if(user.username === req.body.username) {
                 return res.status(409).json({
                     msg: 'username already taken'
                 })
             }
-        })
+        }
+        else if(!user) {
+            next();
+        }
     }).catch((err) => {
         next(err);
     })
-    
-    next();
-}
-
-const restrictUser = () => {
-    return async (req, res, next) => {
-        try {
-            const token = req.headers.authorization;
-            jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-                if(err) {
-                    console.log('sint in restrictUser: ', err)
-                    return res.status(401).json({
-                        msg: 'Invalid credentials'
-                    })
-                }
-            })
-
-            next();
-        } catch (error) {
-            next(error)
-        }
-    }
 }
 
 const checkToken = (req, res, next) => {
@@ -80,6 +62,5 @@ const checkToken = (req, res, next) => {
 module.exports = {
     validateUserId,
     validateUser,
-    restrictUser,
     checkToken
 }

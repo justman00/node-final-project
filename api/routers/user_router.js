@@ -13,8 +13,8 @@ router.post("/register", validateUser, async (req, res, next) => {
   };
 
   Users.addUser(newUser)
-    .then((addesUser) => {
-      return res.status(200).json(addesUser);
+    .then((addedUser) => {
+      return res.status(200).json(addedUser);
     })
     .catch((err) => {
       next(err);

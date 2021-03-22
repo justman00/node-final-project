@@ -1,6 +1,6 @@
 const express = require('express');
 const Notes = require('./../models/notes_model');
-const { validateUserId, restrictUser, checkToken } = require('./../middlewares/user_middleware');
+const { validateUserId, checkToken } = require('./../middlewares/user_middleware');
 const { validateNote, validateNoteId } = require('./../middlewares/note_middleware');
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.post('/:userId/notes', validateUserId, validateNote, checkToken, (req, re
     })
 })
 
-router.get('/:userId/notes', validateUserId, restrictUser(), checkToken, (req, res, next) => {
+router.get('/:userId/notes', validateUserId, checkToken, (req, res, next) => {
     Notes.getAll(req.decoded.id).then((notes) => {
         return res.status(200).json(notes)
     }).catch((err) => {
@@ -35,7 +35,7 @@ router.get('/:userId/notes/:noteId', validateUserId, checkToken, validateNoteId,
     return res.status(200).json(req.note);
 })
 
-router.delete('/:userId/notes/:noteId', validateUserId, validateNoteId, (req, res, next) => {
+router.delete('/:userId/notes/:noteId', validateUserId, checkToken, validateNoteId, (req, res, next) => {
     Notes.deleteNote(req.params.noteId, req.params.userId).then((deletedNote) => {
         return res.status(201).json(deletedNote)
     }).catch((err) => {
@@ -52,7 +52,7 @@ router.put('/:userId/notes/:noteId', validateUserId, checkToken, validateNoteId,
         return acc;
       }, {});
 
-    Notes.editNote(req.note._id, cleanedBody, req.params.userId).then((updatedNote) => {
+    Notes.editNote(req.note._id, cleanedBody, req.params.userId).then(() => {
         return res.status(200).json({msg: 'Note was updated'})
     }).catch((err) => {
         next(err);

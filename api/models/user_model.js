@@ -14,8 +14,8 @@ const UserSchema = new mongoose.Schema({
 
 const Users = mongoose.model('Users', UserSchema);
 
-const getAll = () => {
-    return Users.find().exec();
+const getByUserName = (user) => {
+    return Users.findOne({username: user}).exec();
 }
 
 const getById = (userId) => {
@@ -36,7 +36,7 @@ const addUser = (user) => {
 }
 
 module.exports = {
-    getAll,
+    getByUserName,
     getById,
     deleteUser,
     editUser,
