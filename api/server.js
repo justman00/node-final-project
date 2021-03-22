@@ -22,7 +22,7 @@ const connectDB = async () => {
 
 server.use(express.json());
 server.use(cookieParser());
-server.use('/api/users', noteRouter);
+server.use('/api/notes', noteRouter);
 server.use('/api', userRouter);
 
 server.use((err, req, res, next) => { //error middleware
