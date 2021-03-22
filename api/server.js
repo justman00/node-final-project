@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const server = express();
+const cookieParser = require('cookie-parser');
 
 const userRouter = require('./routers/user_router');
 const noteRouter = require('./routers/notes_router');
@@ -19,11 +20,13 @@ const connectDB = async () => {
   };
   connectDB();
 
-server.use(express.json())
-server.use(noteRouter);
+server.use(express.json());
+server.use(cookieParser());
+server.use('/api/users', noteRouter);
 server.use('/api', userRouter);
 
 server.use((err, req, res, next) => { //error middleware
+  console.log('error middleware: ',err)
   return res.status(500).json({
     msg: 'Something went wrong'
   })

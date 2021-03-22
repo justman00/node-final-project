@@ -48,12 +48,19 @@ router.post("/login", async (req, res, next) => {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: 1000 * 86400, //one day
+      expiresIn: 1000 * 86400 * 7, //1 week
     }
   );
 
   res.cookie('token', token);
   res.status(200).json({msg: 'ok'});
 });
+
+router.get('/logout', (req, res, next) => {
+  res.clearCookie('token');
+  return res.status(200).json({
+    message: 'ok'
+  })
+})
 
 module.exports = router;

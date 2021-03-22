@@ -17,7 +17,7 @@ const validateNote = (req, res, next) => {
 }
 
 const validateNoteId = (req, res, next) => {
-    Notes.getById(req.params.noteId, req.params.userId).then((note) => {
+    Notes.getById(req.params.noteId, req.decoded.id).then((note) => {
         if(!note) {
             return res.status(400).json({msg: 'Note not found'}) 
         }

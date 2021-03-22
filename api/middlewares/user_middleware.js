@@ -49,6 +49,7 @@ const restrictUser = () => {
             const token = req.headers.authorization;
             jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
                 if(err) {
+                    console.log('sint in restrictUser: ', err)
                     return res.status(401).json({
                         msg: 'Invalid credentials'
                     })
@@ -62,8 +63,23 @@ const restrictUser = () => {
     }
 }
 
+const checkToken = (req, res, next) => {
+    const { token } = req.cookies;
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+        console.log('sint in checkToken: ', err)
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    req.decoded = decoded;
+    next();
+  });
+}
+
 module.exports = {
     validateUserId,
     validateUser,
-    restrictUser
+    restrictUser,
+    checkToken
 }
