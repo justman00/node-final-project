@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
 
 const Users = mongoose.model('Users', UserSchema);
 
+const getUsers = () => {
+    return Users.find().exec();
+}
+
 const getByUserName = (user) => {
     return Users.findOne({username: user}).exec();
 }
@@ -36,6 +40,7 @@ const addUser = (user) => {
 }
 
 module.exports = {
+    getUsers,
     getByUserName,
     getById,
     deleteUser,

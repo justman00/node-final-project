@@ -63,4 +63,12 @@ router.get('/logout', (req, res, next) => {
   })
 })
 
+router.get('/test', (req, res, next) => {
+    Users.getUsers().then((users) => {
+      return res.status(200).json(users)
+    }).catch((err) => {
+      next(err);
+    })
+})
+
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const server = express();
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const userRouter = require('./routers/user_router');
 const noteRouter = require('./routers/notes_router');
@@ -22,6 +23,7 @@ const connectDB = async () => {
 
 server.use(express.json());
 server.use(cookieParser());
+server.use(cors());
 server.use('/api/notes', noteRouter);
 server.use('/api', userRouter);
 
