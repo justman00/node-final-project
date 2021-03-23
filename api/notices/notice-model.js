@@ -15,6 +15,7 @@ const noticeSchema = mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
+    require: true,
     ref: "User",
   },
 });
