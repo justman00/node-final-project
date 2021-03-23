@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../users/model');
-const { validateUserBody } = require('./middlewares');
+const { validateUserBody, restrict } = require('./middlewares');
 
 const router = express.Router();
 // 605386bdb7cb9535c2ebca6f
@@ -57,6 +57,10 @@ router.get('/logout', (req, res) => {
   // destrugem tokenul sau sa-l stergem
   res.clearCookie('token');
 
+  res.status(200).json({ message: 'ok' });
+});
+
+router.get('/check-auth', restrict, (req, res) => {
   res.status(200).json({ message: 'ok' });
 });
 

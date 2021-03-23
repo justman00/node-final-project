@@ -1,10 +1,12 @@
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const authRouter = require('./auth/router');
 const notesRouter = require('./notes/router');
@@ -19,7 +21,20 @@ mongoose.connect(
 
 const server = express();
 
-server.use(express.json());
+const whitelist = ['http://localhost:3000', 'https://my-app.vercel.app'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+server.use(cors(corsOptions));
+server.use(bodyParser.json());
 server.use(cookieParser());
 
 server.use('/api/auth', authRouter);
