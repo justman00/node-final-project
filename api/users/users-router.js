@@ -3,15 +3,15 @@ const router = express.Router();
 const Users = require("./users-model");
 const {restrictedAcces} = require('../middleware/middleware');
 
-router.get("/", restrictedAcces, async (req, res, next) => {
- console.log('Decoded', req.decoded);
-  Users.find()
-    .exec()
-    .then((allUsers) => {
-      res.status(200).json(allUsers);
-    })
-    .catch(next);
-});
+// router.get("/", restrictedAcces, async (req, res, next) => {
+//  console.log('Decoded', req.decoded);
+//   Users.find()
+//     .exec()
+//     .then((allUsers) => {
+//       res.status(200).json(allUsers);
+//     })
+//     .catch(next);
+// });
 
 router.get("/id", async (req, res, next) => {
   Users.findById()

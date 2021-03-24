@@ -1,6 +1,4 @@
-## Next steps
-
-- instalam `mongoose`
-- declaram modelele, schemele
-- incepem sa creem endpoint-urile
-- adaugam autentificarea
+## Documentation router
+api/auth
+api/notices
+api/users 
