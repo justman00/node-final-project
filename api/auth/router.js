@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { User } = require("../users/model");
-const { checkRequiredCredentials } = require("./middleware");
+const { restrict, checkRequiredCredentials } = require("./middleware");
 const router = express.Router();
 
 router.post("/register", checkRequiredCredentials, async (req, res, next) => {
@@ -66,6 +66,10 @@ router.post("/login", checkRequiredCredentials, async (req, res, next) => {
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out." });
+});
+
+router.get("/check-auth", restrict, (req, res) => {
+  res.status(200).json({ message: "Logged in." });
 });
 
 module.exports = router;

@@ -5,6 +5,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
@@ -33,10 +34,28 @@ const authRouter = require("./auth/router");
 const usersRouter = require("./users/router");
 const notesRouter = require("./notes/router");
 
+const whitelist = [
+  "http://localhost:3000",
+  "https://notes-app-git-ecaterina-popa-ekaterina-popa.vercel.app/",
+  "https://notes-app-ecaterina-popa.herokuapp.com/",
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
 server.use(helmet());
-server.use(cors());
+server.use(cors(corsOptions));
+server.use(bodyParser.json());
 server.use(logger("combined"));
-server.use(express.json());
+//server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
