@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const cors = require("cors");
+const morgan = require("morgan");
 
 const routerNotices = require("./notices/notice-router");
 const routerUsers = require("./users/users-router");
@@ -26,7 +27,7 @@ server.use(cookieParser());
 server.use("/api/auth", routerAuth);
 server.use("/api/users", routerUsers);
 server.use("/api/notices", routerNotices);
-server.use(middleware.logger);
+server.use(morgan("combined"));
 server.use(middleware.error);
 
 server.get("/", (req, res) => {

@@ -4,7 +4,7 @@ const Notices = require("./notice-model");
 const { restrictedAcces, validateNotice } = require("../middleware/middleware");
 
 router.get("/", restrictedAcces, async (req, res, next) => {
-  Notices.find()
+  Notices.find({ userId: req.decoded.user_id })
     .populate("userId")
     .exec()
     .then((allNotice) => {
@@ -14,7 +14,7 @@ router.get("/", restrictedAcces, async (req, res, next) => {
 });
 
 router.get("/:id", restrictedAcces, async (req, res, next) => {
-  Notices.findById(req.params.id)
+  Notices.find({ userId: req.decoded.user_id, _id: req.params.id })
     .exec()
     .then((findNotice) => {
       res.status(200).json(findNotice);
@@ -24,13 +24,11 @@ router.get("/:id", restrictedAcces, async (req, res, next) => {
 
 router.post("/", validateNotice, restrictedAcces, async (req, res, next) => {
   const newNotice = req.body;
-  console.log("CORPUL", req.body);
-  console.log("DECODED", req.decoded);
   new Notices({
     title: newNotice.title,
     text: newNotice.text,
     tag: newNotice.tag,
-    userId: req.decoded.userId,
+    userId: req.decoded.user_id,
   })
     .save()
     .then((notice) => {
@@ -42,7 +40,10 @@ router.post("/", validateNotice, restrictedAcces, async (req, res, next) => {
 router.put("/:id", restrictedAcces, async (req, res, next) => {
   const updateNotice = req.body;
 
-  Notices.findByIdAndUpdate(req.params.id, req.body)
+  Notices.findOneAndUpdate(
+    { _id: req.params.id, userId: req.decoded.user_id },
+    req.body
+  )
     .exec()
     .then((updateNotice) => {
       res.status(200).json(updateNotice);
@@ -51,7 +52,10 @@ router.put("/:id", restrictedAcces, async (req, res, next) => {
 });
 
 router.delete("/:id", restrictedAcces, async (req, res, next) => {
-  Notices.findByIdAndRemove(req.params.id, req.body)
+  Notices.findOneAndRemove(
+    { _id: req.params.id, userId: req.decoded.user_id },
+    req.body
+  )
     .exec()
     .then((removeNotice) => {
       res.status(200).json(removeNotice);

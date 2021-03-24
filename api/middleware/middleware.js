@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const Logs = require("../logs/logs-model");
 
 const error = (err, req, res, next) => {
   console.error(err);
@@ -11,7 +10,6 @@ const validateUser = (req, res, next) => {
   if (!req.body.user_name || !req.body.user_password || !req.body.user_email) {
     return res.status(400).json({ message: "Oops,Something went wrong:( " });
   }
-
   next();
 };
 
@@ -36,26 +34,8 @@ const restrictedAcces = (req, res, next) => {
   });
 };
 
-const logger = (req, res, next) => {
-  const date = new Date();
-  console.log(date);
-  // const log = await new Logs({
-  //   client_name: req.headers["user-agent"],
-  //   type_request: req.method,
-  //   path_request: req.path,
-  //   ip_adress_request: req.ip,
-  //   date_request: date,
-  // })
-  // .save()
-  // .catch((err) => {
-  //   console.log(err);
-  // });
-  next();
-};
-
 module.exports = {
   error,
-  logger,
   validateUser,
   validateNotice,
   restrictedAcces,
