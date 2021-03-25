@@ -22,7 +22,7 @@ const connectDB = async () => {
   };
   connectDB();
 
-const whiteList = ['http://localhost:3000', 'https://note-take-app.vercel.app'];
+const whiteList = ['http://localhost:5000', 'https://note-take-app.vercel.app'];
 
 const corsOptions = {
   origin: (origin, callback) => {
