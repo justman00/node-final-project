@@ -24,7 +24,7 @@ const connectDB = async () => {
 
 const whiteList = ['http://localhost:3000', 'https://note-take-app.vercel.app'];
 
-const corseOptions = {
+const corsOptions = {
   origin: (origin, callback) => {
     if(whiteList.indexOf(origin) !== -1) {
       callback(null, true);
@@ -37,7 +37,7 @@ const corseOptions = {
 
 server.use(bodyParser.json());
 server.use(cookieParser());
-server.use(cors(corseOptions));
+server.use(cors(corsOptions));
 
 server.use('/api/notes', noteRouter);
 server.use('/api', userRouter);
