@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const server = express();
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const userRouter = require('./routers/user_router');
@@ -21,9 +22,23 @@ const connectDB = async () => {
   };
   connectDB();
 
-server.use(express.json());
+const whiteList = ['http://localhost:3000', 'https://note-take-app.vercel.app'];
+
+const corseOptions = {
+  origin: (origin, callback) => {
+    if(whiteList.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}
+
+server.use(bodyParser.json());
 server.use(cookieParser());
-server.use(cors());
+server.use(cors(corseOptions));
+
 server.use('/api/notes', noteRouter);
 server.use('/api', userRouter);
 

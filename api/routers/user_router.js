@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("./../models/user_model");
-const { validateUser } = require("./../middlewares/user_middleware");
+const { validateUser, checkToken } = require("./../middlewares/user_middleware");
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.post("/register", validateUser, async (req, res, next) => {
     });
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", validateUser, async (req, res, next) => {
   const foundUser = await Users.Users.findOne({
     username: req.body.username,
   }).exec();
@@ -63,12 +63,16 @@ router.get('/logout', (req, res, next) => {
   })
 })
 
-router.get('/test', (req, res, next) => {
+/*router.get('/test', (req, res, next) => { //endpoint de testare
     Users.getUsers().then((users) => {
       return res.status(200).json(users)
     }).catch((err) => {
       next(err);
     })
+})*/
+
+router.get('/auth', checkToken, (req, res) => {
+  return res.status(200).json({msg: 'ok'});
 })
 
 module.exports = router;

@@ -27,11 +27,10 @@ const validateUser = (req, res, next) => {
 }
 
 const checkToken = (req, res, next) => {
-    const { token } = req.cookies;
+    const { token } = req.cookies.token || req.headers.authorization;
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-        console.log('sint in checkToken: ', err)
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
