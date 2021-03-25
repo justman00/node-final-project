@@ -22,14 +22,14 @@ const connectDB = async () => {
   };
   connectDB();
 
-const whiteList = ['http://localhost:3000', 'https://note-take-app.vercel.app', 'https://dashboard.heroku.com/apps'];
+const whiteList = ['http://localhost:3000', 'https://note-take-app.vercel.app'];
 
 const corsOptions = {
   origin: (origin, callback) => {
     if(whiteList.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true
