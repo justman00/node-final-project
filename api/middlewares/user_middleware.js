@@ -9,8 +9,11 @@ const validateUser = (req, res, next) => {
         })
     }
     else
+    next();
+}
+
+const checkUserAccount = (req, res, next) => {
     Users.getByUserName(req.body.username).then((user) => {
-        console.log('user :', user)
         if(user) {
             if(user.username === req.body.username) {
                 return res.status(409).json({
@@ -41,5 +44,6 @@ const checkToken = (req, res, next) => {
 
 module.exports = {
     validateUser,
-    checkToken
+    checkToken,
+    checkUserAccount
 }

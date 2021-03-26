@@ -2,11 +2,11 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("./../models/user_model");
-const { validateUser, checkToken } = require("./../middlewares/user_middleware");
+const { validateUser, checkToken ,checkUserAccount } = require("./../middlewares/user_middleware");
 
 const router = express.Router();
 
-router.post("/register", validateUser, async (req, res, next) => {
+router.post("/register", validateUser, checkUserAccount, async (req, res, next) => {
   const newUser = {
     username: req.body.username,
     password: await bcrypt.hash(req.body.password, 8),
