@@ -5,7 +5,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-//const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
@@ -52,8 +52,9 @@ const whitelist = [
 
 server.use(helmet());
 server.use(cors());
+server.use(bodyParser.json());
 server.use(logger("combined"));
-server.use(express.json());
+//server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);

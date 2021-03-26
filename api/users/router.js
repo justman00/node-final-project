@@ -36,7 +36,7 @@ router.delete("/:user_id", restrict, validateUserId, async (req, res, next) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.user_id).exec();
     res.status(200).json(deletedUser);
-    res.clearCookie("token");
+    //res.clearCookie("token");
   } catch (err) {
     next(err);
   }
