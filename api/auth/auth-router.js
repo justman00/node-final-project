@@ -2,7 +2,7 @@ const express = require("express");
 const Users = require("../users/users-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { validateUser } = require("../middleware/middleware");
+const { validateUser, restrictedAcces } = require("../middleware/middleware");
 
 const router = express.Router();
 
@@ -46,7 +46,7 @@ router.post("/login", validateUser, async (req, res, next) => {
         },
         process.env.JWT_SECRET,
         {
-          expiresIn: '1d', // 1 day
+          expiresIn: "1d", // 1 day
         }
       );
       res.cookie("token", token);
@@ -55,16 +55,24 @@ router.post("/login", validateUser, async (req, res, next) => {
     return res.status(401).json({ message: "Invalid credentials" });
   } catch (error) {
     console.info("DeveloperInfo", error);
-    next;
+    next();
   }
 });
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", async (req, res, next) => {
   try {
     res.clearCookie("token");
-    res.status(200).json({ message: "logout Succesful !!!" });
+    return res.status(200).json({ message: "logout Succesful !!!" });
   } catch (error) {
-    next;
+    next();
+  }
+});
+
+router.get("/check-auth", restrictedAcces, async (req, res, next) => {
+  try {
+    return res.status(200).json({ message: "Welcome !!!" });
+  } catch (error) {
+    next();
   }
 });
 
