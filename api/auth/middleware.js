@@ -11,7 +11,7 @@ const validateUser = (req,res,next)=>{
 }
 
 const restrict = (req, res, next) => {
-    const { token } = req.cookies;
+    const  token  = req.headers.authorization;
   
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
@@ -20,7 +20,7 @@ const restrict = (req, res, next) => {
   
       req.decoded = decoded;
       next();
-    });
+    }); 
   };
 
 module.exports = {validateUser,restrict};

@@ -3,6 +3,7 @@ dotenv.config();
 const express = require('express');
 const mongoose = require('mongoose'); 
 const cookieParser = require('cookie-parser');
+const cors = require('cors')
 
 mongoose.connect(`mongodb+srv://${process.env.USER_USERNAME}:${process.env.USER_PASSWORD}@cluster0.rc96j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
 
@@ -12,6 +13,7 @@ const notesRouter = require('./api/notes/router')
 
 const server = express();
  
+server.use(cors());
 server.use(express.json());
 server.use(cookieParser());
 server.use('/api/auth' , authRouter  )

@@ -2,8 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
  
-const {User} =require('../one-to-many/model')
-const{validateUser,restrict}=require('./middleware')
+const {User} = require('../one-to-many/model')
+const {validateUser,restrict} = require('./middleware')
 
 const router = express.Router();
   
@@ -44,9 +44,12 @@ router.post('/login',validateUser,async(req,res,next)=>{
 
     },
         process.env.JWT_SECRET,
+        {
+            expiresIn: 1000 *60 * 60 * 24 * 7,//o saptamina 
+        }
     );
-    res.cookie('token',token);
-    res.status(200).json({message:'OK'});
+    
+    res.status(200).json({token});
 })
 
 router.get('/logout',(req,res)=>{
