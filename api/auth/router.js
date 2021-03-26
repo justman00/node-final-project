@@ -52,7 +52,7 @@ router.post("/login", checkRequiredCredentials, async (req, res, next) => {
       process.env.JWT_SECRET,
     );
 
-    res.cookie("token", token);
+    //res.cookie("token", token);
 
     res.json({
       message: `Welcome ${user.username}`,
