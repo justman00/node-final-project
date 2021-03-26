@@ -52,8 +52,8 @@ router.post("/login", validateUser, async (req, res, next) => {
     }
   );
 
-  res.cookie('token', token);
-  res.status(200).json({msg: 'ok'});
+  
+  res.status(200).json(token);
 });
 
 router.get('/logout', (req, res, next) => {
