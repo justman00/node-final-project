@@ -21,19 +21,7 @@ mongoose.connect(
 
 const server = express();
 
-const whitelist = ['http://localhost:3000', 'https://my-app.vercel.app'];
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-};
-
-server.use(cors(corsOptions));
+server.use(cors());
 server.use(bodyParser.json());
 server.use(cookieParser());
 
