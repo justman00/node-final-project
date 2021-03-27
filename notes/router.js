@@ -6,8 +6,21 @@ const router = express.Router();
 
 router.get('/', restrict, async (req, res, next) => {
   // sa extraga lista de notite
+  // [a, b, c, d, e, f, g]
+  // .limit(3)
+  // page 1 => 3
+  // page 2 => 3
+  // page 3 => 3
+
+  // .skip(0)
+  // page 1 => a, b
+  // page 2 => c, d,
+  // page 3 => e, f
   try {
-    const notes = await Note.find({ user: req.decoded.id }).exec();
+    const notes = await Note.find({ user: req.decoded.id })
+      .limit(2)
+      .skip(2 * (Number(req.query.page) - 1))
+      .exec();
 
     res.status(200).json({ notes });
   } catch (error) {
