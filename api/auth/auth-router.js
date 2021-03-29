@@ -20,16 +20,16 @@ router.post("/register", validateUser, async (req, res, next) => {
     .catch(next);
 });
 
-router.post("/login", validateUser, async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
-    const { user_name, user_email, user_password } = req.body;
+    const { user_email, user_password } = req.body;
 
     const foundUser = await Users.findOne({
-      user_name: user_name,
       user_email: user_email,
     }).exec();
 
     if (foundUser) {
+      console.log("A intrat", foundUser);
       const passwordValid = await bcrypt.compare(
         user_password,
         foundUser.user_password
