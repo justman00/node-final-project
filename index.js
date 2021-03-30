@@ -1,11 +1,6 @@
-const express = require('express');
+const server = require("./api/server");
 
-const server = express();
-
-server.get('/', (req, res) => {
-  res.send(`<h1>Welcome to notes app</h1>`);
-});
-
-server.listen(5000, () => {
-  console.log(`Server is running on port 5000`);
+server.listen(process.env.PORT || 4000, () => {
+  console.log("Server is running....");
+  
 });
